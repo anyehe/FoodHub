@@ -1,0 +1,4 @@
+@extends('layouts.app')
+@section('content')
+<div class="row g-5 align-items-start"><div class="col-lg-6"><div class="rounded-5 d-flex align-items-center justify-content-center" style="height:420px;background:var(--fh5)"><i class="bi bi-egg-fried" style="font-size:10rem;color:var(--fh2)"></i></div></div><div class="col-lg-6"><span class="accent fw-bold">{{ $product->category->name }}</span><h1 class="display-6 fw-bold mt-2">{{ $product->name }}</h1><p class="lead">{{ $product->description }}</p><div class="display-6 fw-bold mb-4">₱{{ number_format($product->base_price,2) }}</div><div class="card p-4 food-card"><h5>Options</h5>@foreach($product->options as $option)<div class="form-check d-flex justify-content-between"><label class="form-check-label">{{ $option->name }}</label><span>₱{{ number_format($option->price,2) }}</span></div>@endforeach</div><a href="/menu" class="btn btn-fh btn-lg mt-4">Back to menu</a></div></div>
+@endsection

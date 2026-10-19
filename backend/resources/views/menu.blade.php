@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('content')
+<div class="d-flex justify-content-between align-items-end mb-4"><div><div class="text-uppercase small accent fw-bold">Food catalog</div><h1 class="fw-bold">Menu</h1></div><div class="text-secondary">{{ $products->total() }} items</div></div>
+<div class="row g-4">@foreach($products as $product)<div class="col-sm-6 col-lg-3"><div class="card food-card p-2"><div class="rounded-4 d-flex align-items-center justify-content-center" style="height:160px;background:var(--fh5)"><i class="bi bi-egg-fried" style="font-size:4rem;color:var(--fh2)"></i></div><div class="card-body"><span class="badge badge-fh">{{ $product->category->name }}</span><h5 class="fw-bold mt-2">{{ $product->name }}</h5><p class="small text-secondary">{{ $product->description }}</p><div class="d-flex justify-content-between"><strong>₱{{ number_format($product->base_price,2) }}</strong><a class="btn btn-sm btn-fh" href="/product/{{ $product->slug }}">View</a></div></div></div></div>@endforeach</div><div class="mt-4">{{ $products->links('pagination::bootstrap-5') }}</div>
+@endsection

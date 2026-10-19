@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model;
+class Branch extends Model { protected $fillable=['name','code','phone','email','address','latitude','longitude','is_active','delivery_radius_km']; protected $casts=['latitude'=>'float','longitude'=>'float','is_active'=>'boolean','delivery_radius_km'=>'float']; public function products(){return $this->belongsToMany(Product::class)->withPivot('price','is_available');} public function orders(){return $this->hasMany(Order::class);} public function users(){return $this->hasMany(User::class);} public function tables(){return $this->hasMany(RestaurantTable::class);}}

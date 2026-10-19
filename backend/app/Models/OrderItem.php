@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class OrderItem extends Model {protected $fillable=['order_id','product_id','product_name','unit_price','quantity','options','line_total','notes']; protected $casts=['unit_price'=>'decimal:2','quantity'=>'integer','options'=>'array','line_total'=>'decimal:2']; public function product(){return $this->belongsTo(Product::class);}}

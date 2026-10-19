@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up(): void { Schema::create('inventory_items',function(Blueprint $t){$t->id();$t->foreignId('branch_id')->constrained()->cascadeOnDelete();$t->string('name');$t->string('sku');$t->string('unit')->default('pcs');$t->decimal('quantity',12,3)->default(0);$t->decimal('reorder_level',12,3)->default(0);$t->decimal('cost',12,2)->default(0);$t->timestamps();$t->unique(['branch_id','sku']);}); } public function down(): void { Schema::dropIfExists('inventory_items'); } };

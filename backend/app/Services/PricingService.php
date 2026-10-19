@@ -1,0 +1,4 @@
+<?php
+namespace App\Services;
+use App\Models\Coupon;
+class PricingService { public function calculate(array $items, ?Coupon $coupon=null, string $fulfillment='delivery'): array { $subtotal=0; foreach($items as $item){$subtotal += $item['unit_price']*$item['quantity'];} $discount=0; if($coupon && $subtotal >= $coupon->minimum_order){$discount=$coupon->type==='percent'?$subtotal*($coupon->value/100):$coupon->value; if($coupon->maximum_discount)$discount=min($discount,$coupon->maximum_discount); $discount=min($discount,$subtotal);} $tax=round(($subtotal-$discount)*0.12,2); $delivery=$fulfillment==='delivery'?49:0; return ['subtotal'=>round($subtotal,2),'discount_total'=>round($discount,2),'tax_total'=>$tax,'delivery_fee'=>$delivery,'grand_total'=>round($subtotal-$discount+$tax+$delivery,2)]; } }

@@ -1,0 +1,2 @@
+<?php
+$root=dirname(__DIR__);$required=['backend/artisan','backend/composer.json','backend/bootstrap/app.php','backend/routes/api.php','backend/database/seeders/DatabaseSeeder.php','flutter_app/pubspec.yaml'];$missing=[];foreach($required as $f)if(!is_file($root.'/'.$f))$missing[]=$f;if($missing){fwrite(STDERR,"Missing: ".implode(', ',$missing).PHP_EOL);exit(1);}echo "FoodHub source verification: PASS\n";echo "Required Laravel/Flutter files: PASS\n";

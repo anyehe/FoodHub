@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class RestaurantTable extends Model {protected $table='restaurant_tables'; protected $fillable=['branch_id','name','code','capacity','status','qr_token']; protected $casts=['capacity'=>'integer']; public function branch(){return $this->belongsTo(Branch::class);}}

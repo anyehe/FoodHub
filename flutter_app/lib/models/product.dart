@@ -1,0 +1,1 @@
+class Product { final int id; final String name; final double price; Product({required this.id,required this.name,required this.price}); factory Product.fromJson(Map<String,dynamic> j)=>Product(id:j['id'],name:j['name'],price:double.tryParse('${j['base_price']}')??0); }

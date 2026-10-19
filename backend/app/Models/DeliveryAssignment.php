@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class DeliveryAssignment extends Model {protected $fillable=['order_id','rider_id','status','accepted_at','picked_up_at','delivered_at','last_latitude','last_longitude']; protected $casts=['accepted_at'=>'datetime','picked_up_at'=>'datetime','delivered_at'=>'datetime','last_latitude'=>'float','last_longitude'=>'float']; public function rider(){return $this->belongsTo(User::class,'rider_id');} public function order(){return $this->belongsTo(Order::class);}
+ public function locations(){return $this->hasMany(RiderLocationPoint::class,'delivery_assignment_id');}}

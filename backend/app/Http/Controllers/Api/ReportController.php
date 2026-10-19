@@ -1,0 +1,14 @@
+<?php
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller;
+use App\Models\{Order,OrderItem,AuditLog};
+use Illuminate\Http\Request;
+class ReportController extends Controller {
+ private function scope(Request $r){$q=Order::query();$user=$r->user();if($user?->branch_id){$q->where('branch_id',$user->branch_id);}elseif($r->filled('branch_id'))$q->where('branch_id',$r->integer('branch_id'));if($r->filled('from'))$q->whereDate('created_at','>=',$r->date('from'));if($r->filled('to'))$q->whereDate('created_at','<=',$r->date('to'));return $q;}
+ public function summary(Request $r){$q=$this->scope($r);$paid=(clone $q)->where('payment_status','paid');return ['orders'=>$q->count(),'paid_orders'=>(clone $paid)->count(),'sales'=>(float)$paid->sum('grand_total'),'average_order_value'=>(float)($paid->count()?($paid->sum('grand_total')/$paid->count()):0),'cancelled'=>(clone $q)->where('status','cancelled')->count(),'by_status'=>$q->selectRaw('status,count(*) as total')->groupBy('status')->pluck('total','status')];}
+ public function sales(Request $r){$q=$this->scope($r)->where('payment_status','paid');return $q->selectRaw('DATE(created_at) as day, COUNT(*) as orders, SUM(grand_total) as sales')->groupBy('day')->orderBy('day')->get();}
+ public function topProducts(Request $r){$orderIds=$this->scope($r)->where('payment_status','paid')->pluck('id');return OrderItem::whereIn('order_id',$orderIds)->selectRaw('product_id,product_name,SUM(quantity) as quantity,SUM(line_total) as sales')->groupBy('product_id','product_name')->orderByDesc('quantity')->limit(20)->get();}
+ public function cancellation(Request $r){$q=$this->scope($r);$total=$q->count();$cancelled=(clone $q)->where('status','cancelled')->count();return ['orders'=>$total,'cancelled'=>$cancelled,'cancellation_rate_percent'=>$total?round($cancelled/$total*100,2):0,'by_branch'=>$q->selectRaw('branch_id,COUNT(*) orders,SUM(status="cancelled") cancelled')->groupBy('branch_id')->get()];}
+ public function paymentMix(Request $r){$q=$this->scope($r)->whereHas('payment');return $q->join('payments','payments.order_id','=','orders.id')->selectRaw('payments.method,COUNT(*) orders,SUM(CASE WHEN payments.status="paid" THEN payments.amount ELSE 0 END) paid_amount')->groupBy('payments.method')->orderByDesc('paid_amount')->get();}
+ public function audit(Request $r){return AuditLog::with('user:id,name,email,role')->when($r->filled('from'),fn($q)=>$q->whereDate('created_at','>=',$r->date('from')))->when($r->filled('to'),fn($q)=>$q->whereDate('created_at','<=',$r->date('to')))->when($r->filled('role'),fn($q)=>$q->where('role',$r->string('role')))->when($r->filled('method'),fn($q)=>$q->where('method',$r->string('method')))->when($r->filled('status_code'),fn($q)=>$q->where('status_code',$r->integer('status_code')))->latest()->paginate(50);}
+}

@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class InventoryItem extends Model {protected $fillable=['branch_id','name','sku','unit','quantity','reorder_level','cost']; protected $casts=['quantity'=>'decimal:3','reorder_level'=>'decimal:3','cost'=>'decimal:2']; public function branch(){return $this->belongsTo(Branch::class);}}

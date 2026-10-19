@@ -1,0 +1,1 @@
+import '../core/services/api_client.dart'; class CatalogRepository { Future<List<dynamic>> products() async {final d=await ApiClient.get('/products');return d['data']??[];} Future<List<dynamic>> categories() async=>await ApiClient.get('/categories'); }

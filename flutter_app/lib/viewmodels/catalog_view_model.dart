@@ -1,0 +1,1 @@
+import 'package:flutter/foundation.dart'; import '../repositories/catalog_repository.dart'; class CatalogViewModel extends ChangeNotifier { final repo=CatalogRepository(); List<dynamic> products=[]; bool loading=false; Future<void>load()async{loading=true;notifyListeners();products=await repo.products();loading=false;notifyListeners();} }

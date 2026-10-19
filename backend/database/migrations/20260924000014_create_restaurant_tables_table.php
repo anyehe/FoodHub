@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up(): void { Schema::create('restaurant_tables',function(Blueprint $t){$t->id();$t->foreignId('branch_id')->constrained()->cascadeOnDelete();$t->string('name');$t->string('code');$t->unsignedInteger('capacity')->default(2);$t->enum('status',['available','occupied','reserved','cleaning'])->default('available');$t->string('qr_token')->unique();$t->timestamps();$t->unique(['branch_id','code']);}); } public function down(): void { Schema::dropIfExists('restaurant_tables'); } };
